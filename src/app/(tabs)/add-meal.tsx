@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import {
+  Alert,
   StyleSheet,
   Text,
   TextInput,
@@ -7,6 +8,8 @@ import {
   View,
 } from 'react-native';
 import { colors, globalStyles } from '@/styles/global';
+import { addMeal } from '@/storage/meals';
+import { router } from 'expo-router';
 
 export default function AddMealScreen() {
   const [name, setName] = useState('');
@@ -15,8 +18,44 @@ export default function AddMealScreen() {
   const [carbs, setCarbs] = useState('');
   const [fat, setFat] = useState('');
 
-  const handleAddMeal = () => {
-    console.log({ name, calories, protein, carbs, fat });
+  const handleAddMeal = async () => {
+    if (!name || !calories) {
+      Alert.alert('Error', 'Please enter a meal name and calories.');
+      return;
+    }
+
+    const caloriesNum = Number(calories);
+    const proteinNum = protein ? Number(protein) : 0;
+    const carbsNum = carbs ? Number(carbs) : 0;
+    const fatNum = fat ? Number(fat) : 0;
+
+    if (isNaN(caloriesNum) || caloriesNum < 0) {
+      Alert.alert('Error', 'Calories must be a valid number.');
+      return;
+    }
+
+    if ([proteinNum, carbsNum, fatNum].some((n) => isNaN(n) || n < 0)) {
+      Alert.alert('Error', 'Macros must be valid numbers.');
+      return;
+    }
+
+    await addMeal({
+      name,
+      calories: caloriesNum,
+      protein: proteinNum,
+      carbs: carbsNum,
+      fat: fatNum,
+    });
+
+    setName('');
+    setCalories('');
+    setProtein('');
+    setCarbs('');
+    setFat('');
+
+    Alert.alert('Success', 'Meal added successfully!');
+
+    router.push('/');
   };
 
   return (
