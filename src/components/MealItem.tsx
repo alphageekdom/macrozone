@@ -1,6 +1,7 @@
 import { Text, StyleSheet, Alert, TouchableOpacity } from 'react-native';
 import { formatNumber } from '@/lib/format';
 import { deleteMeal } from '@/storage/meals';
+import * as Haptics from 'expo-haptics';
 
 type MealItemProps = {
   id: string;
@@ -30,6 +31,9 @@ export default function MealItem({
         onPress: async () => {
           try {
             await deleteMeal(id);
+            void Haptics.notificationAsync(
+              Haptics.NotificationFeedbackType.Success
+            );
             onDeleted();
           } catch {
             Alert.alert('Error', 'Could not delete meal.');
