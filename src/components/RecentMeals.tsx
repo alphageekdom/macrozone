@@ -1,14 +1,14 @@
 import { View, Text } from 'react-native';
-import React from 'react';
 import { globalStyles } from '@/styles/global';
 import MealItem from './MealItem';
 import { Meal } from '@/storage/meals';
 
 type RecentMealProps = {
   meals: Meal[];
+  onDeleted: () => void;
 };
 
-export default function RecentMeals({ meals }: RecentMealProps) {
+export default function RecentMeals({ meals, onDeleted }: RecentMealProps) {
   return (
     <View style={{ marginTop: 30 }}>
       <Text style={globalStyles.sectionTitle}>Recent Meals</Text>
@@ -18,14 +18,7 @@ export default function RecentMeals({ meals }: RecentMealProps) {
         meals
           .slice(0, 5)
           .map((meal) => (
-            <MealItem
-              key={meal.id}
-              name={meal.name}
-              calories={meal.calories}
-              protein={meal.protein}
-              carbs={meal.carbs}
-              fat={meal.fat}
-            />
+            <MealItem key={meal.id} {...meal} onDeleted={onDeleted} />
           ))
       )}
     </View>
