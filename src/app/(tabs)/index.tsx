@@ -1,6 +1,7 @@
 import HomeHeader from '@/components/HomeHeader';
 import MacroGrid from '@/components/MacroGrid';
 import RecentMeals from '@/components/RecentMeals';
+import ShareButton from '@/components/ShareButton';
 import { getMeals, Meal } from '@/storage/meals';
 import { globalStyles } from '@/styles/global';
 import { useFocusEffect } from 'expo-router';
@@ -23,7 +24,10 @@ export default function HomeScreen() {
 
   return (
     <View style={globalStyles.container}>
-      <Text style={globalStyles.title}>MacroZone</Text>
+      <View style={globalStyles.header}>
+        <Text style={globalStyles.title}>MacroZone</Text>
+        <ShareButton meals={meals} />
+      </View>
       <HomeHeader />
       <MacroGrid meals={meals} />
       <RecentMeals meals={meals} onDeleted={loadMeals} />
