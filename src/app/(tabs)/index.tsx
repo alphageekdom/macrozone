@@ -12,7 +12,10 @@ export default function HomeScreen() {
 
   useFocusEffect(
     useCallback(() => {
-      getMeals().then(setMeals);
+      getMeals().then((data) => {
+        console.log('Meals: ', data);
+        setMeals(data);
+      });
     }, [])
   );
 
@@ -20,7 +23,7 @@ export default function HomeScreen() {
     <View style={globalStyles.container}>
       <Text style={globalStyles.title}>MacroZone</Text>
       <HomeHeader />
-      <MacroGrid />
+      <MacroGrid meals={meals} />
       <RecentMeals meals={meals} />
     </View>
   );
