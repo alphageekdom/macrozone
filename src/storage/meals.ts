@@ -14,8 +14,12 @@ export type Meal = {
 const MEALS_KEY = 'meals';
 
 export const getMeals = async (): Promise<Meal[]> => {
-  const data = await AsyncStorage.getItem(MEALS_KEY);
-  return data ? JSON.parse(data) : [];
+  try {
+    const data = await AsyncStorage.getItem(MEALS_KEY);
+    return data ? JSON.parse(data) : [];
+  } catch {
+    return [];
+  }
 };
 
 export const addMeal = async (
