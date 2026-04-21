@@ -1,4 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as Crypto from 'expo-crypto';
 
 export type Meal = {
   id: string;
@@ -23,11 +24,13 @@ export const addMeal = async (
   const meals = await getMeals();
   const newMeal: Meal = {
     ...meal,
-    id: crypto.randomUUID(),
+    id: Crypto.randomUUID(),
     createdAt: new Date().toISOString(),
   };
 
   await AsyncStorage.setItem(MEALS_KEY, JSON.stringify([newMeal, ...meals]));
+
+  console.log(newMeal);
 
   return newMeal;
 };
