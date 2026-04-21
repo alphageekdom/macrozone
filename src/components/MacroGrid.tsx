@@ -1,12 +1,11 @@
 import { View, StyleSheet } from 'react-native';
 import MacroCard from './MacroCard';
 import { Meal } from '@/storage/meals';
+import { formatNumber } from '@/lib/format';
 
 type MacroGridProps = {
   meals: Meal[];
 };
-
-const formatNumber = (n: number) => n.toLocaleString('en-US');
 
 export default function MacroGrid({ meals }: MacroGridProps) {
   const totals = meals.reduce(

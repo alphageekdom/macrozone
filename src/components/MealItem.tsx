@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet } from 'react-native';
-import React from 'react';
+import { formatNumber } from '@/lib/format';
 
 type MealItemProps = {
   name: string;
@@ -20,7 +20,8 @@ export default function MealItem({
     <View style={styles.container}>
       <Text style={styles.name}>{name}</Text>
       <Text style={styles.macros}>
-        {calories} cal • {protein}g P • {carbs}g C • {fat}g F
+        {formatNumber(calories)} cal • {formatNumber(protein)}g P •{' '}
+        {formatNumber(carbs)}g C • {formatNumber(fat)}g F
       </Text>
     </View>
   );
