@@ -1,8 +1,15 @@
-import { Text, ScrollView, Alert, View } from 'react-native';
-import { globalStyles } from '@/styles/global';
+import {
+  Text,
+  ScrollView,
+  Alert,
+  View,
+  TouchableOpacity,
+  StyleSheet,
+} from 'react-native';
+import { colors, globalStyles } from '@/styles/global';
 import { useFocusEffect } from 'expo-router';
 import { useCallback, useState } from 'react';
-import { getMeals, Meal } from '@/storage/meals';
+import { clearAllMeals, getMeals, Meal } from '@/storage/meals';
 import MealItem from '@/components/MealItem';
 
 export default function MealsScreen() {
@@ -17,6 +24,28 @@ export default function MealsScreen() {
     }
   }, []);
 
+  const handleClearAll = () => {
+    Alert.alert(
+      'Clear all meals?',
+      'This will permanently delete every logged meal. This cannot be undone.',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Clear All',
+          style: 'destructive',
+          onPress: async () => {
+            try {
+              await clearAllMeals();
+              loadMeals();
+            } catch {
+              Alert.alert('Error', 'Could not clear all meals.');
+            }
+          },
+        },
+      ]
+    );
+  };
+
   useFocusEffect(
     useCallback(() => {
       loadMeals();
@@ -25,7 +54,12 @@ export default function MealsScreen() {
 
   return (
     <ScrollView style={globalStyles.container}>
-      <Text style={globalStyles.title}>All Meals</Text>
+      <View style={globalStyles.header}>
+        <Text style={globalStyles.title}>All Meals</Text>
+        <TouchableOpacity onPress={handleClearAll}>
+          <Text style={styles.clearButton}>Clear All</Text>
+        </TouchableOpacity>
+      </View>
       <View style={{ marginTop: 30 }}>
         {meals.length === 0 ? (
           <Text style={globalStyles.empty}>No meals logged yet.</Text>
@@ -38,3 +72,10 @@ export default function MealsScreen() {
     </ScrollView>
   );
 }
+
+const styles = StyleSheet.create({
+  clearButton: {
+    color: colors.alert,
+    fontSize: 16,
+  },
+});
